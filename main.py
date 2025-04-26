@@ -33,17 +33,19 @@ def led_on():
 def set_byte(data):
     spi_instance = create_SPI()
     try:
-        arg = int(data)
+        args = data.split(",")
     except:
         click.error("Can't do that mate")
-    resp = spi_instance.xfer2([0x20, 0x00, arg])
+    resp = spi_instance.xfer2(
+        [0x20, 0x00, int(args[0]), int(args[1]), int(args[2]), int(args[3])]
+    )
     click.echo(f"FPGA status = {resp[1]}")
 
 
 @cli1.command()
 def get_byte():
     spi_instance = create_SPI()
-    resp = spi_instance.xfer2([0x40, 0x00])
+    resp = spi_instance.xfer2([0x40, 0x00, 0x00, 0x00, 0x00, 0x00])
     click.echo(f"Byte returned = {resp[1]}")
 
 
