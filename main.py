@@ -47,7 +47,11 @@ def set_byte(data):
     click.echo(f"Spliting {args[0]} into {byte_1} and {byte_2}")
     click.echo(f"Spliting {args[1]} into {byte_3} and {byte_4}")
 
-    resp = spi_instance.xfer2([0x20, 0x00, byte_1, byte_2, byte_3, byte_4])
+    resp = [0, 0, 0, 0, 0, 0]
+    while resp[1] != 170:
+        resp = spi_instance.xfer2([0x20, 0x00, byte_1, byte_2, byte_3, byte_4])
+        if resp[1] != 170:
+            click.echo("Wrong message from FPGA, retrying!", format="RED")
     click.echo(f"FPGA status = {resp[1]}")
 
 
