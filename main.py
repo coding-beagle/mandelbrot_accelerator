@@ -43,9 +43,8 @@ def set_byte(data):
 @cli1.command()
 def get_byte():
     spi_instance = create_SPI()
-    resp = spi_instance.xfer2([0x40, 0x00, 0x00])
-    click.echo(f"FPGA status = {resp[1]}")
-    click.echo(f"Byte returned = {resp[2]}")
+    resp = spi_instance.xfer2([0x40, 0x00])
+    click.echo(f"Byte returned = {resp[1]}")
 
 
 @cli1.command()
