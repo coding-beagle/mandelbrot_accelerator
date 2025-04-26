@@ -51,7 +51,7 @@ def set_byte(data):
     while resp[1] != 170:
         resp = spi_instance.xfer2([0x20, 0x00, byte_1, byte_2, byte_3, byte_4])
         if resp[1] != 170:
-            click.echo("Wrong message from FPGA, retrying!", format="RED")
+            click.echo("Wrong message from FPGA, retrying!")
     click.echo(f"FPGA status = {resp[1]}")
 
 
