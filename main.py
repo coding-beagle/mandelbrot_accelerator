@@ -24,7 +24,7 @@ def cli1():
 def led_on():
     """Send a command to turn the LED on over SPI"""
     spi_instance = create_SPI()
-    spi_instance.xfer2(0x20)
+    spi_instance.xfer2([0x20])
 
 
 @cli1.command()
@@ -32,7 +32,7 @@ def led_on():
 def led_off():
     """Send a command to turn the LED off over SPI"""
     spi_instance = create_SPI()
-    spi_instance.xfer2(0x10)
+    spi_instance.xfer2([0x10])
 
 
 cli = click.CommandCollection(sources=[cli1])
