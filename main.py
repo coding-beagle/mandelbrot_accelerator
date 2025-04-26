@@ -26,7 +26,7 @@ def led_on():
     spi_instance = create_SPI()
     resp = spi_instance.xfer2([0x20, 0x00])
     # resp = spi_instance.xfer([0x00])  # send dummy byte to get response
-    click.echo(f"FPGA response = {resp}")
+    click.echo(f"FPGA response = {resp[0]}")
 
 
 @cli1.command()
