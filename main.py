@@ -31,22 +31,35 @@ def led_on():
 @cli1.command()
 @click.argument("data")
 def set_byte(data):
+    """Send two 16 bit integers to the FPGA to store in it's registers"""
     spi_instance = create_SPI()
     try:
         args = data.split(",")
     except:
         click.error("Can't do that mate")
-    resp = spi_instance.xfer2(
-        [0x20, 0x00, int(args[0]), int(args[1]), int(args[2]), int(args[3])]
-    )
+
+    byte_1 = (int(args[0]) & 0xFF) >> 8
+    byte_2 = int(args[0]) & 0x0F
+
+    byte_3 = (int(args[1]) & 0xFF) >> 8
+    byte_4 = int(args[1]) & 0x0F
+
+    click.echo(f"Spliting {args[0]} into {byte_1} and {byte_2}")
+    click.echo(f"Spliting {args[1]} into {byte_3} and {byte_4}")
+
+    resp = spi_instance.xfer2([0x20, 0x00, byte_1, byte_2, byte_3, byte_4])
     click.echo(f"FPGA status = {resp[1]}")
 
 
 @cli1.command()
 def get_byte():
+    """Return the two 16 bit integers from the FPGA"""
     spi_instance = create_SPI()
-    resp = spi_instance.xfer2([0x40, 0x00, 0x00, 0x00, 0x00, 0x00])
+    resp = spi_instance.xfer2([0x40, 0x00, 0x00, 0x00, 0x00])
+    int1 = (resp[0] << 8 & 0xF0) | (resp[1] & 0x0F)
+    int2 = (resp[2] << 8 & 0xF0) | (resp[3] & 0x0F)
     click.echo(f"Bytes returned = {resp}")
+    click.echo(f"Decoded ints = {int1} and {int2}")
 
 
 @cli1.command()
