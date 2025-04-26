@@ -38,11 +38,11 @@ def set_byte(data):
     except:
         click.error("Can't do that mate")
 
-    byte_1 = (int(args[0]) & 0xF0) >> 8
-    byte_2 = int(args[0]) & 0x0F
+    byte_1 = (int(args[0]) & 0xFF00) >> 8
+    byte_2 = int(args[0]) & 0x00FF
 
-    byte_3 = (int(args[1]) & 0xF0) >> 8
-    byte_4 = int(args[1]) & 0x0F
+    byte_3 = (int(args[1]) & 0xFF00) >> 8
+    byte_4 = int(args[1]) & 0x00FF
 
     click.echo(f"Spliting {args[0]} into {byte_1} and {byte_2}")
     click.echo(f"Spliting {args[1]} into {byte_3} and {byte_4}")
