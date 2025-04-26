@@ -24,8 +24,28 @@ def cli1():
 def led_on():
     """Send a command to turn the LED on over SPI"""
     spi_instance = create_SPI()
-    resp = spi_instance.xfer2([0x20, 0x00])
+    resp = spi_instance.xfer2([0x20, 0x00, 0x00])
     click.echo(f"FPGA response = {resp[1]}")
+
+
+@cli1.command()
+@click.argument("data")
+def set_byte(data):
+    spi_instance = create_SPI()
+    try:
+        arg = int(data)
+    except:
+        click.error("Can't do that mate")
+    resp = spi_instance.xfer2([0x20, 0x00, arg])
+    click.echo(f"FPGA status = {resp[1]}")
+
+
+@cli1.command()
+def get_byte():
+    spi_instance = create_SPI()
+    resp = spi_instance.xfer2([0x40, 0x00, 0x00])
+    click.echo(f"FPGA status = {resp[1]}")
+    click.echo(f"Byte returned = {resp[2]}")
 
 
 @cli1.command()
