@@ -56,8 +56,8 @@ def get_byte():
     """Return the two 16 bit integers from the FPGA"""
     spi_instance = create_SPI()
     resp = spi_instance.xfer2([0x40, 0x00, 0x00, 0x00, 0x00])
-    int1 = (resp[0] << 8 & 0xF0) | (resp[1] & 0x0F)
-    int2 = (resp[2] << 8 & 0xF0) | (resp[3] & 0x0F)
+    int1 = (resp[1] << 8 & 0xF0) | (resp[0] & 0x0F)
+    int2 = (resp[3] << 8 & 0xF0) | (resp[2] & 0x0F)
     click.echo(f"Bytes returned = {resp}")
     click.echo(f"Decoded ints = {int1} and {int2}")
 
