@@ -59,7 +59,11 @@ def set_byte(data):
 def get_byte():
     """Return the two 16 bit integers from the FPGA"""
     spi_instance = create_SPI()
-    resp = spi_instance.xfer2([0x40, 0x00, 0x00, 0x00, 0x00])
+    resp = [0, 0, 0, 0, 0, 0]
+    while resp[1] != 170:
+        resp = spi_instance.xfer2([0x40, 0x00, 0x00, 0x00, 0x00, 0x00])
+        if resp[1] != 170:
+            click.echo("Wrong message from FPGA, retrying!")
     int1 = (resp[1] << 8 & 0xFF00) | (resp[2] & 0x00FF)
     int2 = (resp[3] << 8 & 0xFF00) | (resp[4] & 0x00FF)
     click.echo(f"Bytes returned = {resp}")
