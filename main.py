@@ -64,8 +64,8 @@ def get_byte():
         resp = spi_instance.xfer2([0x40, 0x00, 0x00, 0x00, 0x00, 0x00])
         if resp[1] != 170:
             click.echo("Wrong message from FPGA, retrying!")
-    int1 = (resp[1] << 8 & 0xFF00) | (resp[2] & 0x00FF)
-    int2 = (resp[3] << 8 & 0xFF00) | (resp[4] & 0x00FF)
+    int1 = (resp[2] << 8 & 0xFF00) | (resp[3] & 0x00FF)
+    int2 = (resp[4] << 8 & 0xFF00) | (resp[5] & 0x00FF)
     click.echo(f"Bytes returned = {resp}")
     click.echo(f"Decoded ints = {int1} and {int2}")
 
