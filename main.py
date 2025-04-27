@@ -72,8 +72,8 @@ def set_coords(data):
 
     click.echo(f"Splitting {x},{y}")
 
-    x = x << 6
-    y = y << 5
+    x = x << 4
+    y = y << 4
 
     byte_1 = (int(x) & 0xFF00) >> 8
     byte_2 = int(x) & 0x00FF
