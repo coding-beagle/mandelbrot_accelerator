@@ -234,7 +234,7 @@ def draw_mandelbrot():
             iteration_count = min(
                 get_iteration_count_helper(spi_instance, f"{x},{y}"), 255
             )
-            image_data[y, x] = [iteration_count, 0, 0]
+            image_data[x, y] = [iteration_count, 0, 0]
         click.echo(f"Finished column {y} / 512")
 
     click.echo(image_data)
