@@ -130,7 +130,7 @@ def get_complex_x():
     # click.echo(f"Number bytes to hex = {[hex(i) for i in resp[2:]]}")
     click.echo(f"Number bytes to binary = {q12_52_raw}")
     click.echo(
-        f"Decoded Q12.52 fixed-point number = {float(FixedPoint(q12_52_raw, signed=1, m=12,n=52))}"
+        f"Decoded Q12.52 fixed-point number = {float(FixedPoint(hex(q12_52_raw), signed=1, m=12,n=52))}"
     )
 
 
