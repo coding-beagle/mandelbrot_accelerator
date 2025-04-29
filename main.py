@@ -132,8 +132,14 @@ def get_complex_x():
     # Convert from Q12.52 fixed-point to floating-point
     q12_52_float = q12_52_raw / (2**52)
 
+    resp_bytes = ""
+
+    for i in range(8):
+        resp_bytes.join(str(bin(resp[2:][i])).strip("0b"))
+
     click.echo(f"Bytes returned = {resp}")
-    click.echo(f"Number bytes to binary = {[bin(i) for i in resp[2:]]}")
+    click.echo(f"Number bytes to hex = {[hex(i) for i in resp[2:]]}")
+    click.echo(f"Number bytes to binary = {resp_bytes}")
     click.echo(f"Decoded Q12.52 fixed-point number = {q12_52_float}")
 
 
