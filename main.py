@@ -135,7 +135,7 @@ def get_complex_x():
     resp_bytes = ""
 
     for i in range(8):
-        resp_bytes.join(str(bin(resp[2:][i])).strip("0b"))
+        resp_bytes += str(bin(resp[2:][i])).strip("0b")
 
     click.echo(f"Bytes returned = {resp}")
     click.echo(f"Number bytes to hex = {[hex(i) for i in resp[2:]]}")
