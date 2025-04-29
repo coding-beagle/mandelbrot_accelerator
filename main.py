@@ -122,7 +122,7 @@ def get_complex_x():
 
     # Combine the bytes into a 64-bit integer
     q12_52_raw = "".join(
-        [str(hex(i)).split("0x")[-1] if i != 0 else "00" for i in resp[2:9]]
+        [str(hex(i)).split("0x")[-1] if i != 0 else "00" for i in resp[2:]]
     )
     # for i in range(2, 9):
     # q12_52_raw += hex(resp[i]).strip("0x")
