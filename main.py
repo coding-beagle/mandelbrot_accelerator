@@ -173,11 +173,13 @@ def get_iter_count(data):
     Then it sends a message to query whether or not those coordinates are part of
     the mandelbrot set
     """
-    get_iteration_count_helper(data)
-
-
-def get_iteration_count_helper(data):
     spi_instance = create_SPI()
+
+    get_iteration_count_helper(spi_instance, data)
+
+
+def get_iteration_count_helper(spi_instance, data):
+
     try:
         args = data.split(",")
     except:
@@ -222,9 +224,11 @@ def get_iteration_count_helper(data):
 
 @cli1.command()
 def draw_mandelbrot():
+    spi_instance = create_SPI()
+    image_data = np.zeros((1024, 512, 3), dtype=np.uint8)
     for x in range(1024):
         for y in range(512):
-            click.echo(get_iteration_count_helper(f"{x},{y}"))
+            click.echo(get_iteration_count_helper(spi_instance, f"{x},{y}"))
 
 
 @cli1.command()
