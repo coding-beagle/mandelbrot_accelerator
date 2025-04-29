@@ -1,6 +1,8 @@
 import spidev
 import click
 from fixedpoint import FixedPoint
+from matplotlib import pyplot as plt
+import numpy as np
 
 
 def create_SPI() -> spidev.SpiDev:
@@ -211,6 +213,14 @@ def get_iter_count(data):
 
     click.echo(f"FPGA status = {resp_2[1]}")
     click.echo(f"Resultant bits = {[bin(i) for i in resp_2[2:]]}")
+    return resp_2[-1]
+
+
+@cli1.command()
+def draw_mandelbrot():
+    for x in range(1024):
+        for y in range(512):
+            print(get_iter_count(f"{x},{y}"))
 
 
 @cli1.command()
