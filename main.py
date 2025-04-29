@@ -123,7 +123,7 @@ def get_complex_x():
     # Combine the bytes into a 64-bit integer
     q12_52_raw = ""
     for i in range(2, 9):
-        q12_52_raw += bin(resp[i]).strip("0b")
+        q12_52_raw += hex(resp[i]).strip("0b")
 
     # Check if the number is negative (sign bit is set)
     # if q12_52_raw & (1 << 63):
@@ -138,9 +138,9 @@ def get_complex_x():
     #     resp_bytes += str(bin(resp[2:][i])).strip("0b")
 
     click.echo(f"Bytes returned = {resp}")
-    click.echo(f"Number bytes to hex = {[hex(i) for i in resp[2:]]}")
+    # click.echo(f"Number bytes to hex = {[hex(i) for i in resp[2:]]}")
     click.echo(f"Number bytes to binary = {q12_52_raw}")
-    click.echo(f"Decoded Q12.52 fixed-point number = {q12_52_float}")
+    # click.echo(f"Decoded Q12.52 fixed-point number = {q12_52_float}")
 
 
 @cli1.command()
