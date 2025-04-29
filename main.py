@@ -130,7 +130,7 @@ def get_complex_x():
     #     q12_52_raw -= 1 << 64
 
     # Convert from Q12.52 fixed-point to floating-point
-    q12_52_float = q12_52_raw / (2**52)
+    # q12_52_float = q12_52_raw / (2**52)
 
     # resp_bytes = ""
 
