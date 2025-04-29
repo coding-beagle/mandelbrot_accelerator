@@ -123,7 +123,7 @@ def get_complex_x():
     # Combine the bytes into a 64-bit integer
     q12_52_raw = ""
     for i in range(2, 9):
-        q12_52_raw += hex(resp[i]).strip("0b")
+        q12_52_raw += hex(resp[i]).strip("0x")
 
     # Check if the number is negative (sign bit is set)
     # if q12_52_raw & (1 << 63):
