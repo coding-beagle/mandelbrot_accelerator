@@ -3,6 +3,7 @@ import click
 from fixedpoint import FixedPoint
 from matplotlib import pyplot as plt
 import numpy as np
+from PIL import Image
 
 
 def create_SPI() -> spidev.SpiDev:
@@ -229,15 +230,24 @@ def draw_mandelbrot():
     spi_instance = create_SPI()
     image_data = np.zeros((1024, 512, 3), dtype=np.uint8)
 
-    for y in range(512):
-        for x in range(1024):
-            iteration_count = min(
-                get_iteration_count_helper(spi_instance, f"{x},{y}"), 255
-            )
-            image_data[x, y] = [iteration_count, 0, 0]
-        click.echo(f"Finished column {y} / 512")
+    try:
+        for y in range(512):
+            for x in range(1024):
+                iteration_count = min(
+                    get_iteration_count_helper(spi_instance, f"{x},{y}"), 255
+                )
+                image_data[x, y] = [iteration_count, 0, 0]
+            click.echo(f"Finished column {y} / 512")
+    except KeyboardInterrupt:
+        click.echo("Process interrupted. Saving the current image...")
 
-    click.echo(image_data)
+    # Convert the image data to an Image object
+    img = Image.fromarray(image_data, "RGB")
+
+    # Save the image to a file
+    img.save("mandelbrot.png")
+
+    click.echo("Mandelbrot image saved as mandelbrot.png")
 
 
 @cli1.command()
