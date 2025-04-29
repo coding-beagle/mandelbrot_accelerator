@@ -11,7 +11,7 @@ def create_SPI() -> spidev.SpiDev:
 
     spi.open(0, 0)
 
-    spi.max_speed_hz = 2**20 + 2**16
+    spi.max_speed_hz = 2**18
 
     spi.mode = 0b01
 
