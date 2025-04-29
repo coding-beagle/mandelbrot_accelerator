@@ -162,6 +162,58 @@ def get_complex_y():
 
 
 @cli1.command()
+@click.argument("data")
+def get_iter_count(data):
+    """
+    Send an x,y coordinate bit integers to the FPGA to store in its registers
+    This handles the appropriate bit padding required on the FPGA side.
+
+    Then it sends a message to query whether or not those coordinates are part of
+    the mandelbrot set
+    """
+    spi_instance = create_SPI()
+    try:
+        args = data.split(",")
+    except:
+        click.error("Can't do that mate")
+
+    x, y = int(args[0]), int(args[1])
+
+    click.echo(f"Splitting {x},{y}")
+
+    # x = x << 4
+    # y = y << 4
+
+    byte_1 = (int(x) & 0xFF00) >> 8
+    byte_2 = int(x) & 0x00FF
+
+    byte_3 = (int(y) & 0xFF00) >> 8
+    byte_4 = int(y) & 0x00FF
+
+    click.echo(f"X Bytes for debug {byte_1},{byte_2}")
+    click.echo(f"Y Bytes for debug {byte_3},{byte_4}")
+
+    resp = [0, 0, 0, 0, 0, 0]
+    while resp[1] != 170:
+        resp = spi_instance.xfer2([0x20, 0x00, byte_1, byte_2, byte_3, byte_4])
+        if resp[1] != 170:
+            click.echo("Wrong message from FPGA, retrying!")
+
+    click.echo(f"FPGA status = {resp[1]}, fetching resulting calculation")
+
+    resp_2 = [0, 0, 0, 0, 0, 0, 0, 0]
+    while resp_2[1] != 170:
+        resp_2 = spi_instance.xfer2(
+            [0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+        )
+        if resp_2[1] != 170:
+            click.echo("Wrong message from FPGA, retrying!")
+
+    click.echo(f"FPGA status = {resp_2[1]}")
+    click.echo(f"Resultant bits = {[bin(i) for i in resp_2[2:]]}")
+
+
+@cli1.command()
 # @click.option("--get", help="Command to send")
 def led_off():
     """Send a command to turn the LED off over SPI"""
