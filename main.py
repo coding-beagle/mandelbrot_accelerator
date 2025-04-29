@@ -228,15 +228,23 @@ def get_iteration_count_helper(spi_instance, data):
 def draw_mandelbrot():
     spi_instance = create_SPI()
     image_data = np.zeros((1024, 512, 3), dtype=np.uint8)
+    plt.ion()  # Turn on interactive mode
+    fig, ax = plt.subplots()
+    img_display = ax.imshow(image_data, interpolation="nearest")
+
     for x in range(1024):
         for y in range(512):
-            image_data[x:y] = [
-                min(get_iteration_count_helper(spi_instance, f"{x},{y}"), 255),
-                0,
-                0,
-            ]
+            iteration_count = min(
+                get_iteration_count_helper(spi_instance, f"{x},{y}"), 255
+            )
+            image_data[x, y] = [iteration_count, 0, 0]
+            if y % 10 == 0:  # Update the plot every 10 pixels for better performance
+                img_display.set_data(image_data)
+                plt.pause(0.001)
 
+    plt.ioff()  # Turn off interactive mode
     plt.imshow(image_data, interpolation="nearest")
+    plt.show()
 
 
 @cli1.command()
