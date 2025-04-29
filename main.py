@@ -126,11 +126,12 @@ def get_complex_x():
         [str(hex(i)).split("0x")[-1] if i != 0 else "00" for i in resp[2:]]
     )
 
+    str_number = "0x" + q12_52_raw
+
     click.echo(f"Bytes returned = {resp}")
-    # click.echo(f"Number bytes to hex = {[hex(i) for i in resp[2:]]}")
     click.echo(f"Number bytes to binary = {q12_52_raw}")
     click.echo(
-        f"Decoded Q12.52 fixed-point number = {float(FixedPoint(int(q12_52_raw, 16), signed=1, m=12,n=52))}"
+        f"Decoded Q12.52 fixed-point number = {float(FixedPoint(str_number, signed=1, m=12,n=52))}"
     )
 
 
