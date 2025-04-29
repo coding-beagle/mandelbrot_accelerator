@@ -1,5 +1,6 @@
 import spidev
 import click
+from fixedpoint import FixedPoint
 
 
 def create_SPI() -> spidev.SpiDev:
@@ -124,25 +125,13 @@ def get_complex_x():
     q12_52_raw = "".join(
         [str(hex(i)).split("0x")[-1] if i != 0 else "00" for i in resp[2:]]
     )
-    # for i in range(2, 9):
-    # q12_52_raw += hex(resp[i]).strip("0x")
-
-    # Check if the number is negative (sign bit is set)
-    # if q12_52_raw & (1 << 63):
-    #     q12_52_raw -= 1 << 64
-
-    # Convert from Q12.52 fixed-point to floating-point
-    # q12_52_float = q12_52_raw / (2**52)
-
-    # resp_bytes = ""
-
-    # for i in range(8):
-    #     resp_bytes += str(bin(resp[2:][i])).strip("0b")
 
     click.echo(f"Bytes returned = {resp}")
     # click.echo(f"Number bytes to hex = {[hex(i) for i in resp[2:]]}")
     click.echo(f"Number bytes to binary = {q12_52_raw}")
-    # click.echo(f"Decoded Q12.52 fixed-point number = {q12_52_float}")
+    click.echo(
+        f"Decoded Q12.52 fixed-point number = {float(FixedPoint(q12_52_raw, signed=1, m=12,n=52))}"
+    )
 
 
 @cli1.command()
