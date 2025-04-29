@@ -230,7 +230,7 @@ def draw_mandelbrot():
     image_data = np.zeros((1024, 512, 3), dtype=np.uint8)
     for x in range(1024):
         for y in range(512):
-            click.echo(get_iteration_count_helper(spi_instance, f"{x},{y}")[-1])
+            click.echo(get_iteration_count_helper(spi_instance, f"{x},{y}"))
 
 
 @cli1.command()
