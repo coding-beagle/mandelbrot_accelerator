@@ -121,25 +121,25 @@ def get_complex_x():
             click.echo("Wrong message from FPGA, retrying!")
 
     # Combine the bytes into a 64-bit integer
-    q12_52_raw = 0
+    q12_52_raw = ""
     for i in range(2, 9):
-        q12_52_raw = (q12_52_raw << 8) | resp[i]
+        q12_52_raw += bin(resp[i]).strip("0b")
 
     # Check if the number is negative (sign bit is set)
-    if q12_52_raw & (1 << 63):
-        q12_52_raw -= 1 << 64
+    # if q12_52_raw & (1 << 63):
+    #     q12_52_raw -= 1 << 64
 
     # Convert from Q12.52 fixed-point to floating-point
     q12_52_float = q12_52_raw / (2**52)
 
-    resp_bytes = ""
+    # resp_bytes = ""
 
-    for i in range(8):
-        resp_bytes += str(bin(resp[2:][i])).strip("0b")
+    # for i in range(8):
+    #     resp_bytes += str(bin(resp[2:][i])).strip("0b")
 
     click.echo(f"Bytes returned = {resp}")
     click.echo(f"Number bytes to hex = {[hex(i) for i in resp[2:]]}")
-    click.echo(f"Number bytes to binary = {resp_bytes}")
+    click.echo(f"Number bytes to binary = {q12_52_raw}")
     click.echo(f"Decoded Q12.52 fixed-point number = {q12_52_float}")
 
 
