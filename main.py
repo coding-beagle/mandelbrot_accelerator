@@ -229,6 +229,7 @@ def draw_mandelbrot():
     spi_instance = create_SPI()
     image_data = np.zeros((1024, 512, 3), dtype=np.uint8)
     plt.ion()  # Turn on interactive mode
+    plt.ion()  # Ensure interactive mode is on
     fig, ax = plt.subplots()
     img_display = ax.imshow(image_data, interpolation="nearest")
 
@@ -240,10 +241,12 @@ def draw_mandelbrot():
             image_data[x, y] = [iteration_count, 0, 0]
             if y % 10 == 0:  # Update the plot every 10 pixels for better performance
                 img_display.set_data(image_data)
+                fig.canvas.draw_idle()  # Explicitly update the figure canvas
                 plt.pause(0.001)
 
     plt.ioff()  # Turn off interactive mode
-    plt.imshow(image_data, interpolation="nearest")
+    fig, ax = plt.subplots()  # Create a new figure for the final display
+    ax.imshow(image_data, interpolation="nearest")
     plt.show()
 
 
