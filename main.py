@@ -224,7 +224,7 @@ def get_iteration_count_helper(data):
 def draw_mandelbrot():
     for x in range(1024):
         for y in range(512):
-            print(get_iteration_count_helper(f"{x},{y}"))
+            click.echo(get_iteration_count_helper(f"{x},{y}"))
 
 
 @cli1.command()
