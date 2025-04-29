@@ -203,22 +203,22 @@ def get_iteration_count_helper(spi_instance, data):
     # click.echo(f"Y Bytes for debug {byte_3},{byte_4}")
 
     resp = [0, 0, 0, 0, 0, 0]
-    while resp[1] != 170:
-        resp = spi_instance.xfer2([0x20, 0x00, byte_1, byte_2, byte_3, byte_4])
-        if resp[1] != 170:
-            # click.echo("Wrong message from FPGA, retrying!")
-            pass
+    # while resp[1] != 170:
+    resp = spi_instance.xfer2([0x20, 0x00, byte_1, byte_2, byte_3, byte_4])
+    # if resp[1] != 170:
+    # click.echo("Wrong message from FPGA, retrying!")
+    # pass
 
     # click.echo(f"FPGA status = {resp[1]}, fetching resulting calculation")
 
     resp_2 = [0, 0, 0, 0, 0, 0, 0, 0]
-    while resp_2[1] != 170:
-        resp_2 = spi_instance.xfer2(
-            [0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
-        )
-        if resp_2[1] != 170:
-            pass
-            # click.echo("Wrong message from FPGA, retrying!")
+    # while resp_2[1] != 170:
+    resp_2 = spi_instance.xfer2(
+        [0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+    )
+    # if resp_2[1] != 170:
+    # pass
+    # click.echo("Wrong message from FPGA, retrying!")
 
     # click.echo(f"FPGA status = {resp_2[1]}")
     # click.echo(f"Resultant bits = {[bin(i) for i in resp_2[2:]]}")
