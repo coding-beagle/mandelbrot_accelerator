@@ -210,6 +210,14 @@ def get_iteration_count_helper(spi_instance):
 
 
 @cli1.command()
+def increment():
+    spi_instance = create_SPI()
+
+    resp = spi_instance.xfer2([0x01, 0x00])
+    click.echo(resp[1])
+
+
+@cli1.command()
 @click.argument("dimensions")
 def draw_mandelbrot(dimensions):
 
