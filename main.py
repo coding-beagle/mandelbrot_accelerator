@@ -210,7 +210,7 @@ def get_iteration_count_helper(spi_instance, data):
             byte_3,
             byte_4,
         ],
-        10000,
+        1000000,
     )
 
     resp_2 = spi_instance.xfer2(
@@ -222,7 +222,7 @@ def get_iteration_count_helper(spi_instance, data):
             0x00,
             0x00,
         ],
-        10000,
+        1000000,
     )
 
     return resp_2[-1]
@@ -252,7 +252,7 @@ def draw_mandelbrot(dimensions):
                     get_iteration_count_helper(spi_instance, f"{x},{y}"), 255
                 )
                 image_data[y, x] = [iteration_count, 0, 0]
-            click.echo(f"Finished column {y} / {y_int}")
+            click.echo(f"Finished column {x} / {x_int}")
     except KeyboardInterrupt:
         click.echo("Process interrupted. Saving the current image...")
 
