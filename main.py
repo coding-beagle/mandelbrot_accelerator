@@ -279,7 +279,7 @@ def set_value(data, register):
     number_hex = hex(number).split("0x")[-1].zfill(16)  # 16 hex digits = 64 bits
     click.echo(f"number bytes = {number_hex}")
 
-    args = [int(number_hex[i : i + 2]) for i in range(0, len(number_hex), 2)]
+    args = [int(hex(number_hex[i : i + 2])) for i in range(0, len(number_hex), 2)]
     hex_args = [number_hex[i : i + 2] for i in range(0, len(number_hex), 2)]
 
     click.echo(f"Hex args = {hex_args}")
