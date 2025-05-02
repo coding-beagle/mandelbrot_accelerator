@@ -269,11 +269,11 @@ def set_value(data, register):
 
     spi_instance = create_SPI()
 
-    number = FixedPoint(float(data), signed=1, m=12, n=52, str_base=2)
+    number = FixedPoint(float(data), signed=1, m=12, n=52, str_base=16)
 
     # Convert the FixedPoint number to bytes
 
-    click.echo(f"number bytes = {bin(number.bits)}")
+    click.echo(f"number bytes = {number}")
 
     # Prepare the SPI command with the register and the FixedPoint bytes
     # args = [0x80 | (int(register) << 4), 0x00] + list(number_bytes)
