@@ -202,8 +202,25 @@ def get_iteration_count_helper(spi_instance, data):
     byte_3 = (int(y) & 0xFF00) >> 8
     byte_4 = int(y) & 0x00FF
 
-    resp = spi_instance.xfer2([0x20, 0x00, byte_1, byte_2, byte_3, byte_4])
-    resp_2 = spi_instance.xfer2([0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+    resp_2 = spi_instance.xfer2(
+        [
+            0x20,
+            0x00,
+            byte_1,
+            byte_2,
+            byte_3,
+            byte_4,
+            0xF0,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+            0x00,
+        ]
+    )
 
     return resp_2[-1]
 
