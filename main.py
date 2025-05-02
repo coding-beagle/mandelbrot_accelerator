@@ -235,12 +235,12 @@ def draw_mandelbrot(dimensions):
     resp = spi_instance.xfer2([0x20, 0x00, byte_1, byte_2, byte_3, byte_4])
 
     try:
-        for x in range(x_int):
-            for y in range(y_int):
+        for y in range(y_int):
+            for x in range(x_int):
                 iteration_count = min(get_iteration_count_helper(spi_instance), 255)
                 image_data[y, x] = [iteration_count, 0, 0]
                 spi_instance.xfer2([0x10])
-            click.echo(f"Finished column {x} / {x_int}")
+            click.echo(f"Finished column {y} / {y_int}")
     except KeyboardInterrupt:
         click.echo("Process interrupted. Saving the current image...")
 
