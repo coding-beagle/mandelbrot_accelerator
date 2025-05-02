@@ -209,7 +209,8 @@ def get_iteration_count_helper(spi_instance, data):
             byte_2,
             byte_3,
             byte_4,
-        ]
+        ],
+        10000,
     )
 
     resp_2 = spi_instance.xfer2(
@@ -220,7 +221,8 @@ def get_iteration_count_helper(spi_instance, data):
             0x00,
             0x00,
             0x00,
-        ]
+        ],
+        10000,
     )
 
     return resp_2[-1]
@@ -244,8 +246,8 @@ def draw_mandelbrot(dimensions):
     image_data = np.zeros((y_int, x_int, 3), dtype=np.uint8)
 
     try:
-        for y in range(y_int):
-            for x in range(x_int):
+        for x in range(x_int):
+            for y in range(y_int):
                 iteration_count = min(
                     get_iteration_count_helper(spi_instance, f"{x},{y}"), 255
                 )
