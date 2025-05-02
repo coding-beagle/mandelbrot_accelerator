@@ -191,29 +191,20 @@ def get_complex_y():
 #     get_iteration_count_helper(spi_instance, data)
 
 
-def get_iteration_count_helper(spi_instance):
+def get_iteration_count_helper(spi_instance, data):
 
+    x, y = data.split(",")
+    resp = [0, 0, 0, 0, 0, 0]
+
+    byte_1 = (int(x) & 0xFF00) >> 8
+    byte_2 = int(x) & 0x00FF
+
+    byte_3 = (int(y) & 0xFF00) >> 8
+    byte_4 = int(y) & 0x00FF
+
+    resp = spi_instance.xfer2([0x20, 0x00, byte_1, byte_2, byte_3, byte_4])
     resp_2 = spi_instance.xfer2([0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
-    resp = spi_instance.xfer([0x40, 0x00, 0x00, 0x00, 0x00, 0x00])
 
-    int1 = (resp[2] << 8 & 0xFF00) | (resp[3] & 0x00FF)
-    int2 = (resp[4] << 8 & 0xFF00) | (resp[5] & 0x00FF)
-    click.echo(f"Ints decoded {int1}, {int2}")
-
-    spi_instance.xfer2([0x10])
-
-    resp = spi_instance.xfer([0x40, 0x00, 0x00, 0x00, 0x00, 0x00])
-
-    int1 = (resp[2] << 8 & 0xFF00) | (resp[3] & 0x00FF)
-    int2 = (resp[4] << 8 & 0xFF00) | (resp[5] & 0x00FF)
-    click.echo(f"Ints decoded (post transport) {int1}, {int2}")
-
-    # if resp_2[1] != 170:
-    # pass
-    # click.echo("Wrong message from FPGA, retrying!")
-
-    # click.echo(f"FPGA status = {resp_2[1]}")
-    # click.echo(f"Resultant bits = {[bin(i) for i in resp_2[2:]]}")
     return resp_2[-1]
 
 
@@ -234,21 +225,12 @@ def draw_mandelbrot(dimensions):
     spi_instance = create_SPI()
     image_data = np.zeros((y_int, x_int, 3), dtype=np.uint8)
 
-    x, y = 0, 0
-    resp = [0, 0, 0, 0, 0, 0]
-
-    byte_1 = (int(x) & 0xFF00) >> 8
-    byte_2 = int(x) & 0x00FF
-
-    byte_3 = (int(y) & 0xFF00) >> 8
-    byte_4 = int(y) & 0x00FF
-
-    resp = spi_instance.xfer2([0x20, 0x00, byte_1, byte_2, byte_3, byte_4])
-
     try:
         for y in range(y_int):
             for x in range(x_int):
-                iteration_count = min(get_iteration_count_helper(spi_instance), 255)
+                iteration_count = min(
+                    get_iteration_count_helper(spi_instance, f"{x},{y}"), 255
+                )
                 image_data[y, x] = [iteration_count, 0, 0]
             click.echo(f"Finished column {y} / {y_int}")
     except KeyboardInterrupt:
