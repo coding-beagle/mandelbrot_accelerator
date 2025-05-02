@@ -138,6 +138,14 @@ def get_complex_x():
     )
 
 
+def q12_52_bytes_to_float(bytes_input):
+    q12_52_raw = "".join(
+        [str(hex(i)).split("0x")[-1] if i != 0 else "00" for i in bytes_input]
+    )
+
+    return float(FixedPoint("0x" + q12_52_raw, signed=1, m=12, n=52))
+
+
 @cli1.command()
 def get_complex_y():
     """Return the complex representation of the y screen space coordinate"""
@@ -248,6 +256,40 @@ def draw_mandelbrot():
     img.save("mandelbrot.png")
 
     click.echo("Mandelbrot image saved as mandelbrot.png")
+
+
+@cli1.command()
+@click.argument("data", help="Data to set, will get converted to Q12.52 format")
+@click.argument("register", help="0,1,2,3 for stepXVal, stepYVal, topLeftX, topLeftY")
+def set_value(data, register):
+    if not (register in ["0", "1", "2", "3"]):
+        click.error(
+            "Wrong register entered! 0,1,2,3 for stepXVal, stepYVal, topLeftX, topLeftY"
+        )
+
+    spi_instance = create_SPI()
+
+    number = FixedPoint(data, signed=1, m=12, n=52)
+
+    click.echo(number.bits)  # test
+
+
+@cli1.command()
+@click.argument("register", help="0,1,2,3 for stepXVal, stepYVal, topLeftX, topLeftY")
+def get_value(register):
+    if not (register in ["0", "1", "2", "3"]):
+        click.error(
+            "Wrong register entered! 0,1,2,3 for stepXVal, stepYVal, topLeftX, topLeftY"
+        )
+
+    spi_instance = create_SPI()
+
+    args = [0x90, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+    resp = spi_instance.xfer2(args)
+
+    click.echo(f"FPGA Status {resp[1]}")
+    value = q12_52_bytes_to_float(resp[2:])
+    click.echo(f"Returned value = {value}")
 
 
 @cli1.command()
