@@ -258,6 +258,9 @@ def draw_mandelbrot():
     click.echo("Mandelbrot image saved as mandelbrot.png")
 
 
+REGISTER_VALUE_ARRAY = {"0": 0x01, "1": 0x02, "2": 0x04, "3": 0x08}
+
+
 @cli1.command()
 @click.argument("data")
 @click.argument("register")
@@ -279,11 +282,17 @@ def set_value(data, register):
     number_hex = hex(number).split("0x")[-1].zfill(16)  # 16 hex digits = 64 bits
     click.echo(f"number bytes = {number_hex}")
 
-    args = [int((number_hex[i : i + 2]), 16) for i in range(0, len(number_hex), 2)]
-    click.echo(f"Int args = {args}")
+    command_args = [
+        int((number_hex[i : i + 2]), 16) for i in range(0, len(number_hex), 2)
+    ]
+    click.echo(f"Int args = {command_args}")
+
+    command_args.extend(REGISTER_VALUE_ARRAY[register])
+
+    args = [0xE0, 0x00]
 
     # Send the command over SPI
-    resp = spi_instance.xfer2(args)
+    resp = spi_instance.xfer2(args.extend(command_args))
 
     click.echo(f"FPGA Status {resp[1]}")
 
@@ -298,7 +307,18 @@ def get_value(register):
 
     spi_instance = create_SPI()
 
-    args = [0x90, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+    args = [
+        0x90,
+        0x00,
+        REGISTER_VALUE_ARRAY[register],
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+    ]
     resp = spi_instance.xfer2(args)
 
     click.echo(f"FPGA Status {resp[1]}")
