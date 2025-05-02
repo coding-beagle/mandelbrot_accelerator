@@ -277,7 +277,12 @@ def set_value(data, register):
 
     click.echo(f"number bytes = {hex(number)}")
 
-    click.echo(f"MSBs (in hex) = {hex(number)[2:4]}")
+    number_hex = hex(number).split("0x")[-1]
+
+    args = [number_hex[i : i + 2] for i in range(0, len(number_hex), 2)]
+    hex_args = [number_hex[i : i + 2] for i in range(0, len(number_hex), 2)]
+
+    click.echo(f"Hex args = {hex_args}")
 
     # Send the command over SPI
     # resp = spi_instance.xfer2(args)
