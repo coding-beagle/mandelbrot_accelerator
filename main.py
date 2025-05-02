@@ -194,7 +194,6 @@ def get_complex_y():
 def get_iteration_count_helper(spi_instance, data):
 
     x, y = data.split(",")
-    resp = [0, 0, 0, 0, 0, 0]
 
     byte_1 = (int(x) & 0xFF00) >> 8
     byte_2 = int(x) & 0x00FF
@@ -202,7 +201,7 @@ def get_iteration_count_helper(spi_instance, data):
     byte_3 = (int(y) & 0xFF00) >> 8
     byte_4 = int(y) & 0x00FF
 
-    resp_2 = spi_instance.xfer2(
+    _ = spi_instance.xfer2(
         [
             0x20,
             0x00,
@@ -210,10 +209,12 @@ def get_iteration_count_helper(spi_instance, data):
             byte_2,
             byte_3,
             byte_4,
+        ]
+    )
+
+    resp_2 = spi_instance.xfer2(
+        [
             0xF0,
-            0x00,
-            0x00,
-            0x00,
             0x00,
             0x00,
             0x00,
