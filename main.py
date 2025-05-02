@@ -277,8 +277,7 @@ def set_value(data, register):
 
     click.echo(f"number bytes = {hex(number)}")
 
-    # Prepare the SPI command with the register and the FixedPoint bytes
-    # args = [0x80 | (int(register) << 4), 0x00] + list(number_bytes)
+    click.echo(f"MSBs (in hex) = {hex(number)[:2]}")
 
     # Send the command over SPI
     # resp = spi_instance.xfer2(args)
