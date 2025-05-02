@@ -342,10 +342,10 @@ def get_value(register):
 
 
 @cli1.command()
-def reset_to_original():
+def reset():
     spi_instance = create_SPI()
 
-    args = [0x00, 0x00]
+    args = [0xA0, 0x00]
 
     resp = spi_instance.xfer2(args)
     click.echo(f"FPGA Status = {resp[1]}")
