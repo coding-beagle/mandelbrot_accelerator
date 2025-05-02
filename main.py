@@ -330,6 +330,16 @@ def get_value(register):
 
 
 @cli1.command()
+def reset_to_original():
+    spi_instance = create_SPI()
+
+    args = [0x00, 0x00]
+
+    resp = spi_instance.xfer2(args)
+    click.echo(f"FPGA Status = {resp[1]}")
+
+
+@cli1.command()
 # @click.option("--get", help="Command to send")
 def led_off():
     """Send a command to turn the LED off over SPI"""
