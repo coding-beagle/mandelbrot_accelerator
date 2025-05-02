@@ -239,9 +239,7 @@ def draw_mandelbrot(dimensions):
     try:
         for x in range(x_int):
             for y in range(y_int):
-                iteration_count = min(
-                    get_iteration_count_helper(spi_instance, f"{x},{y}"), 255
-                )
+                iteration_count = min(get_iteration_count_helper(spi_instance), 255)
                 image_data[y, x] = [iteration_count, 0, 0]
             click.echo(f"Finished column {x} / {x_int}")
     except KeyboardInterrupt:
