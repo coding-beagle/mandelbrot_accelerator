@@ -269,6 +269,8 @@ def set_value(data, register):
 
     spi_instance = create_SPI()
 
+    click.echo(f"Setting data to {float(data)}")
+
     number = FixedPoint(float(data), signed=1, m=12, n=52, str_base=16)
 
     # Convert the FixedPoint number to bytes
