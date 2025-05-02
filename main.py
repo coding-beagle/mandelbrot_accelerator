@@ -199,7 +199,7 @@ def get_iteration_count_helper(spi_instance):
         [0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
     )
 
-    _ = spi_instance.xfer2([0x01, 0x00])  # increment
+    _ = spi_instance.xfer2([0x10, 0x00])  # increment
     # if resp_2[1] != 170:
     # pass
     # click.echo("Wrong message from FPGA, retrying!")
@@ -213,8 +213,7 @@ def get_iteration_count_helper(spi_instance):
 def increment():
     spi_instance = create_SPI()
 
-    resp = spi_instance.xfer2([0x01, 0x00])
-    click.echo(resp[1])
+    resp = spi_instance.xfer2([0x10])
 
 
 @cli1.command()
