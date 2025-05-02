@@ -285,7 +285,10 @@ def set_value(data, register):
     command_args = [
         int((number_hex[i : i + 2]), 16) for i in range(0, len(number_hex), 2)
     ]
+
+    hex_args = [(number_hex[i : i + 2]) for i in range(0, len(number_hex), 2)]
     click.echo(f"Int args = {command_args}")
+    click.echo(f"Hex args = {hex_args}")
 
     command_args.extend([REGISTER_VALUE_ARRAY[register]])
 
