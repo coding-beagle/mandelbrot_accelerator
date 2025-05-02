@@ -275,7 +275,7 @@ def set_value(data, register):
 
     # Convert the FixedPoint number to bytes
 
-    click.echo(f"number bytes = {number}")
+    click.echo(f"number bytes = {hex(number)}")
 
     # Prepare the SPI command with the register and the FixedPoint bytes
     # args = [0x80 | (int(register) << 4), 0x00] + list(number_bytes)
