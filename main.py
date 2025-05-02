@@ -280,15 +280,12 @@ def set_value(data, register):
     click.echo(f"number bytes = {number_hex}")
 
     args = [int((number_hex[i : i + 2]), 16) for i in range(0, len(number_hex), 2)]
-    hex_args = [number_hex[i : i + 2] for i in range(0, len(number_hex), 2)]
-
-    click.echo(f"Hex args = {hex_args}")
     click.echo(f"Int args = {args}")
 
     # Send the command over SPI
-    # resp = spi_instance.xfer2(args)
+    resp = spi_instance.xfer2(args)
 
-    # click.echo(f"FPGA Status {resp[1]}")
+    click.echo(f"FPGA Status {resp[1]}")
 
 
 @cli1.command()
