@@ -139,6 +139,7 @@ def get_complex_x():
 
 
 def q12_52_bytes_to_float(bytes_input):
+    click.echo(f"Converting {bytes_input} to float!")
     q12_52_raw = "".join(
         [str(hex(i)).split("0x")[-1] if i != 0 else "00" for i in bytes_input]
     )
