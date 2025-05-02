@@ -238,6 +238,7 @@ def get_iteration_count_helper(spi_instance, data):
 
 
 @cli1.command()
+@click.argument("dimensions")
 def draw_mandelbrot(dimensions):
 
     x_val, y_val = dimensions.split(",")
