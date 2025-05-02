@@ -176,58 +176,30 @@ def get_complex_y():
     )
 
 
-@cli1.command()
-@click.argument("data")
-def get_iter_count(data):
-    """
-    Send an x,y coordinate bit integers to the FPGA to store in its registers
-    This handles the appropriate bit padding required on the FPGA side.
+# @cli1.command()
+# @click.argument("data")
+# def get_iter_count(data):
+#     """
+#     Send an x,y coordinate bit integers to the FPGA to store in its registers
+#     This handles the appropriate bit padding required on the FPGA side.
 
-    Then it sends a message to query whether or not those coordinates are part of
-    the mandelbrot set
-    """
-    spi_instance = create_SPI()
+#     Then it sends a message to query whether or not those coordinates are part of
+#     the mandelbrot set
+#     """
+#     spi_instance = create_SPI()
 
-    get_iteration_count_helper(spi_instance, data)
+#     get_iteration_count_helper(spi_instance, data)
 
 
-def get_iteration_count_helper(spi_instance, data):
-
-    try:
-        args = data.split(",")
-    except:
-        click.error("Can't do that mate")
-
-    x, y = int(args[0]), int(args[1])
-
-    # click.echo(f"Splitting {x},{y}")
-
-    # x = x << 4
-    # y = y << 4
-
-    byte_1 = (int(x) & 0xFF00) >> 8
-    byte_2 = int(x) & 0x00FF
-
-    byte_3 = (int(y) & 0xFF00) >> 8
-    byte_4 = int(y) & 0x00FF
-
-    # click.echo(f"X Bytes for debug {byte_1},{byte_2}")
-    # click.echo(f"Y Bytes for debug {byte_3},{byte_4}")
-
-    resp = [0, 0, 0, 0, 0, 0]
-    # while resp[1] != 170:
-    resp = spi_instance.xfer2([0x20, 0x00, byte_1, byte_2, byte_3, byte_4])
-    # if resp[1] != 170:
-    # click.echo("Wrong message from FPGA, retrying!")
-    # pass
-
-    # click.echo(f"FPGA status = {resp[1]}, fetching resulting calculation")
+def get_iteration_count_helper(spi_instance):
 
     resp_2 = [0, 0, 0, 0, 0, 0, 0, 0]
     # while resp_2[1] != 170:
     resp_2 = spi_instance.xfer2(
         [0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
     )
+
+    _ = spi_instance.xfer2([0x01, 0x00])  # increment
     # if resp_2[1] != 170:
     # pass
     # click.echo("Wrong message from FPGA, retrying!")
@@ -246,6 +218,23 @@ def draw_mandelbrot(dimensions):
     y_int = int(y_val)
     spi_instance = create_SPI()
     image_data = np.zeros((y_int, x_int, 3), dtype=np.uint8)
+
+    x, y = 0, 0
+    resp = [0, 0, 0, 0, 0, 0]
+
+    byte_1 = (int(x) & 0xFF00) >> 8
+    byte_2 = int(x) & 0x00FF
+
+    byte_3 = (int(y) & 0xFF00) >> 8
+    byte_4 = int(y) & 0x00FF
+
+    resp = spi_instance.xfer2([0x20, 0x00, byte_1, byte_2, byte_3, byte_4])
+
+    byte_1 = (int(x) & 0xFF00) >> 8
+    byte_2 = int(x) & 0x00FF
+
+    byte_3 = (int(y) & 0xFF00) >> 8
+    byte_4 = int(y) & 0x00FF
 
     try:
         for x in range(x_int):
