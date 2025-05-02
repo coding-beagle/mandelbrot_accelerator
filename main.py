@@ -259,8 +259,8 @@ def draw_mandelbrot():
 
 
 @cli1.command()
-@click.argument("data", help="Data to set, will get converted to Q12.52 format")
-@click.argument("register", help="0,1,2,3 for stepXVal, stepYVal, topLeftX, topLeftY")
+@click.argument("data")
+@click.argument("register")
 def set_value(data, register):
     if not (register in ["0", "1", "2", "3"]):
         click.error(
@@ -275,7 +275,7 @@ def set_value(data, register):
 
 
 @cli1.command()
-@click.argument("register", help="0,1,2,3 for stepXVal, stepYVal, topLeftX, topLeftY")
+@click.argument("register")
 def get_value(register):
     if not (register in ["0", "1", "2", "3"]):
         click.error(
