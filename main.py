@@ -176,24 +176,34 @@ def get_complex_y():
     )
 
 
-# @cli1.command()
-# @click.argument("data")
-# def get_iter_count(data):
-#     """
-#     Send an x,y coordinate bit integers to the FPGA to store in its registers
-#     This handles the appropriate bit padding required on the FPGA side.
+@cli1.command()
+@click.argument("data")
+def get_iter_count(data):
+    """
+    Send an x,y coordinate bit integers to the FPGA to store in its registers
+    This handles the appropriate bit padding required on the FPGA side.
 
-#     Then it sends a message to query whether or not those coordinates are part of
-#     the mandelbrot set
-#     """
-#     spi_instance = create_SPI()
+    Then it sends a message to query whether or not those coordinates are part of
+    the mandelbrot set
+    """
+    spi_instance = create_SPI()
 
-#     get_iteration_count_helper(spi_instance, data)
+    get_iteration_count_helper(spi_instance, data)
 
 
 def get_iteration_count_helper(spi_instance, data):
 
-    x, y = data.split(",")
+    try:
+        args = data.split(",")
+    except:
+        click.error("Can't do that mate")
+
+    x, y = int(args[0]), int(args[1])
+
+    # click.echo(f"Splitting {x},{y}")
+
+    # x = x << 4
+    # y = y << 4
 
     byte_1 = (int(x) & 0xFF00) >> 8
     byte_2 = int(x) & 0x00FF
@@ -201,58 +211,45 @@ def get_iteration_count_helper(spi_instance, data):
     byte_3 = (int(y) & 0xFF00) >> 8
     byte_4 = int(y) & 0x00FF
 
-    _ = spi_instance.xfer2(
-        [
-            0x20,
-            0x00,
-            byte_1,
-            byte_2,
-            byte_3,
-            byte_4,
-        ],
-        1000000,
-    )
+    # click.echo(f"X Bytes for debug {byte_1},{byte_2}")
+    # click.echo(f"Y Bytes for debug {byte_3},{byte_4}")
 
+    resp = [0, 0, 0, 0, 0, 0]
+    # while resp[1] != 170:
+    resp = spi_instance.xfer2([0x20, 0x00, byte_1, byte_2, byte_3, byte_4])
+    # if resp[1] != 170:
+    # click.echo("Wrong message from FPGA, retrying!")
+    # pass
+
+    # click.echo(f"FPGA status = {resp[1]}, fetching resulting calculation")
+
+    resp_2 = [0, 0, 0, 0, 0, 0, 0, 0]
+    # while resp_2[1] != 170:
     resp_2 = spi_instance.xfer2(
-        [
-            0xF0,
-            0x00,
-            0x00,
-            0x00,
-            0x00,
-            0x00,
-        ],
-        1000000,
+        [0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
     )
+    # if resp_2[1] != 170:
+    # pass
+    # click.echo("Wrong message from FPGA, retrying!")
 
+    # click.echo(f"FPGA status = {resp_2[1]}")
+    # click.echo(f"Resultant bits = {[bin(i) for i in resp_2[2:]]}")
     return resp_2[-1]
 
 
 @cli1.command()
-def increment():
+def draw_mandelbrot():
     spi_instance = create_SPI()
-
-    resp = spi_instance.xfer2([0x10])
-
-
-@cli1.command()
-@click.argument("dimensions")
-def draw_mandelbrot(dimensions):
-
-    x_val, y_val = dimensions.split(",")
-    x_int = int(x_val)
-    y_int = int(y_val)
-    spi_instance = create_SPI()
-    image_data = np.zeros((y_int, x_int, 3), dtype=np.uint8)
+    image_data = np.zeros((512, 1024, 3), dtype=np.uint8)
 
     try:
-        for x in range(x_int):
-            for y in range(y_int):
+        for x in range(1024):
+            for y in range(512):
                 iteration_count = min(
                     get_iteration_count_helper(spi_instance, f"{x},{y}"), 255
                 )
                 image_data[y, x] = [iteration_count, 0, 0]
-            click.echo(f"Finished column {x} / {x_int}")
+            click.echo(f"Finished column {x} / 1024")
     except KeyboardInterrupt:
         click.echo("Process interrupted. Saving the current image...")
 
@@ -263,6 +260,13 @@ def draw_mandelbrot(dimensions):
     img.save("mandelbrot.png")
 
     click.echo("Mandelbrot image saved as mandelbrot.png")
+
+
+@cli1.command()
+def increment():
+    spi_instance = create_SPI()
+
+    resp = spi_instance.xfer2([0x10])
 
 
 REGISTER_VALUE_ARRAY = {"0": 1, "1": 2, "2": 4, "3": 8}
