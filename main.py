@@ -287,7 +287,7 @@ def set_value(data, register):
     ]
     click.echo(f"Int args = {command_args}")
 
-    command_args.extend(REGISTER_VALUE_ARRAY[register])
+    command_args.extend([REGISTER_VALUE_ARRAY[register]])
 
     args = [0xE0, 0x00]
 
