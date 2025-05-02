@@ -195,11 +195,8 @@ def get_iteration_count_helper(spi_instance):
 
     resp_2 = [0, 0, 0, 0, 0, 0, 0, 0]
     # while resp_2[1] != 170:
-    resp_2 = spi_instance.xfer2(
-        [0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
-    )
+    resp_2 = spi_instance.xfer2([0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
 
-    _ = spi_instance.xfer2([0x10, 0x00])  # increment
     # if resp_2[1] != 170:
     # pass
     # click.echo("Wrong message from FPGA, retrying!")
@@ -237,17 +234,12 @@ def draw_mandelbrot(dimensions):
 
     resp = spi_instance.xfer2([0x20, 0x00, byte_1, byte_2, byte_3, byte_4])
 
-    byte_1 = (int(x) & 0xFF00) >> 8
-    byte_2 = int(x) & 0x00FF
-
-    byte_3 = (int(y) & 0xFF00) >> 8
-    byte_4 = int(y) & 0x00FF
-
     try:
         for x in range(x_int):
             for y in range(y_int):
                 iteration_count = min(get_iteration_count_helper(spi_instance), 255)
                 image_data[y, x] = [iteration_count, 0, 0]
+                spi_instance.xfer2([0x10])
             click.echo(f"Finished column {x} / {x_int}")
     except KeyboardInterrupt:
         click.echo("Process interrupted. Saving the current image...")
