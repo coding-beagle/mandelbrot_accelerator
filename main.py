@@ -243,13 +243,13 @@ def draw_mandelbrot(dimensions):
     image_data = np.zeros((y_int, x_int, 3), dtype=np.uint8)
 
     try:
-        for y in range(y_int):
-            for x in range(x_int):
+        for x in range(x_int):
+            for y in range(y_int):
                 iteration_count = min(
                     get_iteration_count_helper(spi_instance, f"{x},{y}"), 255
                 )
                 image_data[y, x] = [iteration_count, 0, 0]
-            click.echo(f"Finished column {y} / {y_int}")
+            click.echo(f"Finished column {x} / {x_int}")
     except KeyboardInterrupt:
         click.echo("Process interrupted. Saving the current image...")
 
