@@ -269,7 +269,7 @@ def set_value(data, register):
 
     spi_instance = create_SPI()
 
-    number = FixedPoint(data, signed=1, m=12, n=52)
+    number = FixedPoint(float(data), signed=1, m=12, n=52)
 
     click.echo(number.bits)  # test
 
