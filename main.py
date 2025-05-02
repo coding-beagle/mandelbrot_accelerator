@@ -291,8 +291,10 @@ def set_value(data, register):
 
     args = [0xE0, 0x00]
 
+    args.extend(command_args)
+
     # Send the command over SPI
-    resp = spi_instance.xfer2(args.extend(command_args))
+    resp = spi_instance.xfer2(args)
 
     click.echo(f"FPGA Status {resp[1]}")
 
