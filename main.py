@@ -275,7 +275,9 @@ def set_value(data, register):
 
     # Convert the FixedPoint number to bytes
 
-    click.echo(f"number bytes = {hex(number)}")
+    # Ensure the number is 63 bits long by padding with leading zeros if necessary
+    number_hex = hex(number).split("0x")[-1].zfill(16)  # 16 hex digits = 64 bits
+    click.echo(f"number bytes (63 bits) = {number_hex}")
 
     number_hex = hex(number).split("0x")[-1]
 
