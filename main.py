@@ -188,7 +188,7 @@ def get_iter_count(data):
     """
     spi_instance = create_SPI()
 
-    get_iteration_count_helper(spi_instance, data)
+    click.echo(get_iteration_count_helper(spi_instance, data))
 
 
 def get_iteration_count_helper(spi_instance, data):
