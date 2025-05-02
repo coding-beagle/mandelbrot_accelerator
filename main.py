@@ -267,7 +267,7 @@ def draw_mandelbrot(dimensions):
     click.echo("Mandelbrot image saved as mandelbrot.png")
 
 
-REGISTER_VALUE_ARRAY = {"0": 0x01, "1": 0x02, "2": 0x04, "3": 0x08}
+REGISTER_VALUE_ARRAY = {"0": 1, "1": 2, "2": 4, "3": 8}
 
 
 @cli1.command()
