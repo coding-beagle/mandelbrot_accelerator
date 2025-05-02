@@ -254,7 +254,7 @@ def draw_mandelbrot(dimensions):
                     get_iteration_count_helper(spi_instance, f"{x},{y}"), 255
                 )
                 image_data[y, x] = [iteration_count, 0, 0]
-            click.echo(f"Finished column {x} / 1024")
+            click.echo(f"Finished column {x} / {x_int}")
     except KeyboardInterrupt:
         click.echo("Process interrupted. Saving the current image...")
 
