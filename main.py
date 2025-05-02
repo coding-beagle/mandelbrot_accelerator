@@ -320,6 +320,7 @@ def get_value(register):
         0x00,
         0x00,
         0x00,
+        0x00,
     ]
     resp = spi_instance.xfer2(args)
 
