@@ -269,20 +269,19 @@ def set_value(data, register):
 
     spi_instance = create_SPI()
 
-    number = FixedPoint(float(data), signed=1, m=12, n=52)
+    number = FixedPoint(float(data), signed=1, m=12, n=52, str_base=2)
 
     # Convert the FixedPoint number to bytes
-    number_bytes = number.bytes
 
-    click.echo(f"number bytes = {number_bytes}")
+    click.echo(f"number bytes = {number}")
 
     # Prepare the SPI command with the register and the FixedPoint bytes
-    args = [0x80 | (int(register) << 4), 0x00] + list(number_bytes)
+    # args = [0x80 | (int(register) << 4), 0x00] + list(number_bytes)
 
     # Send the command over SPI
-    resp = spi_instance.xfer2(args)
+    # resp = spi_instance.xfer2(args)
 
-    click.echo(f"FPGA Status {resp[1]}")
+    # click.echo(f"FPGA Status {resp[1]}")
 
 
 @cli1.command()
